@@ -91,7 +91,7 @@ export function PageTransition({
   ]);
   const currentLayer =
     layers.find((layer) => layer.status === 'current') ?? layers[layers.length - 1];
-  const currentLayerKey = currentLayer?.key ?? location.key;
+  const currentLayerKey = currentLayer?.location.key ?? location.key;
   const currentLayerPathname = currentLayer?.location.pathname;
 
   const resolveScrollContainer = useCallback(() => {
@@ -103,7 +103,13 @@ export function PageTransition({
   useLayoutEffect(() => {
     if (isAnimating) return;
     if (location.key === currentLayerKey) return;
-    if (currentLayerPathname === location.pathname) return;
+    if (currentLayerPathname === location.pathname) {
+      // Keep the mounted page while updating query, hash, and navigation state.
+      setLayers((prev) =>
+        prev.map((layer) => (layer.status === 'current' ? { ...layer, location } : layer))
+      );
+      return;
+    }
     const scrollContainer = resolveScrollContainer();
     const exitScrollOffset = scrollContainer?.scrollTop ?? 0;
     exitScrollOffsetRef.current = exitScrollOffset;
@@ -130,7 +136,7 @@ export function PageTransition({
 
     // When using iOS-style stacking, history POP within the same "section" can have equal route order.
     // In that case, prefer treating navigation to an existing layer as a backward (pop) transition.
-    if (nextVariant === 'ios' && layers.some((layer) => layer.key === location.key)) {
+    if (nextVariant === 'ios' && layers.some((layer) => layer.location.key === location.key)) {
       nextDirection = 'backward';
     }
 
@@ -177,7 +183,7 @@ export function PageTransition({
           return [...previousStack, exitingLayer, nextCurrent];
         }
 
-        const targetIndex = prev.findIndex((layer) => layer.key === location.key);
+        const targetIndex = prev.findIndex((layer) => layer.location.key === location.key);
         if (targetIndex !== -1) {
           const targetStack: Layer[] = prev.slice(0, targetIndex + 1).map((layer, idx): Layer => {
             const isTarget = idx === targetIndex;
