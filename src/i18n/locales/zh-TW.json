@@ -1083,6 +1083,9 @@
           "description": "除錯、日誌輸出與使用統計"
         },
         "advanced": {
+          "claude_title": "Claude",
+          "claude_cache_keepalive": "Claude 提示詞快取保活",
+          "claude_cache_keepalive_desc": "使用原帳號自動續期符合條件的對話：5 分鐘快取每 4 分鐘、1 小時快取每 50 分鐘重播，最多輸出 1 個 token。快取讀取仍會計費。預設關閉，儲存後無需重新啟動即可生效；Home 模式不可用。",
           "title": "進階與實驗",
           "description": "請求標頭偽裝、簽章快取、外掛來源等不常修改的設定",
           "plugins_title": "外掛",

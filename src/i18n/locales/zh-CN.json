@@ -1057,6 +1057,9 @@
           "description": "调试、日志输出与使用统计"
         },
         "advanced": {
+          "claude_title": "Claude",
+          "claude_cache_keepalive": "Claude 提示词缓存保活",
+          "claude_cache_keepalive_desc": "使用原账号自动续期符合条件的会话：5 分钟缓存每 4 分钟、1 小时缓存每 50 分钟重放，最多输出 1 个 token。缓存读取仍会计费。默认关闭，保存后无需重启即可生效；Home 模式不可用。",
           "title": "高级与实验",
           "description": "请求头伪装、签名缓存、插件源等不常修改的设置",
           "plugins_title": "插件",

@@ -1185,6 +1185,7 @@ function getNextDirtyFields(
       'authAutoRefreshWorkers',
       'antigravitySignatureCacheEnabled',
       'antigravitySignatureBypassStrict',
+      'claudeCacheKeepalive',
       'claudeHeaderUserAgent',
       'claudeHeaderPackageVersion',
       'claudeHeaderRuntimeVersion',
@@ -1457,6 +1458,7 @@ function parseVisualValuesFromYaml(yamlContent: string): VisualConfigValues {
       v8OauthProvidersAntigravity?.['signature-bypass-strict']
     ),
 
+    claudeCacheKeepalive: Boolean(v8OauthProvidersClaude?.['cache-keepalive']),
     claudeHeaderUserAgent:
       typeof claudeHeaderDefaults?.['user-agent'] === 'string'
         ? claudeHeaderDefaults['user-agent']
@@ -1827,6 +1829,17 @@ export function useVisualConfig() {
             doc,
             ['oauth', 'providers', 'antigravity', 'signature-bypass-strict'],
             values.antigravitySignatureBypassStrict
+          );
+        }
+
+        if (dirtyFields.has('claudeCacheKeepalive')) {
+          ensureMapInDoc(doc, ['oauth']);
+          ensureMapInDoc(doc, ['oauth', 'providers']);
+          ensureMapInDoc(doc, ['oauth', 'providers', 'claude']);
+          setBooleanInDoc(
+            doc,
+            ['oauth', 'providers', 'claude', 'cache-keepalive'],
+            values.claudeCacheKeepalive
           );
         }
 

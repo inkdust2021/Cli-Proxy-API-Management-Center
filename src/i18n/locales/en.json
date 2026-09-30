@@ -1059,6 +1059,9 @@
           "description": "Debug, log output, and usage statistics"
         },
         "advanced": {
+          "claude_title": "Claude",
+          "claude_cache_keepalive": "Claude prompt cache keepalive",
+          "claude_cache_keepalive_desc": "Automatically renew eligible conversations on the original account: every 4 minutes for 5-minute caches, or every 50 minutes for 1-hour caches, with at most 1 output token. Cache reads are billable. Disabled by default; saving takes effect without a restart. Unavailable in Home mode.",
           "title": "Advanced & Experimental",
           "description": "Header spoofing, signature cache, plugin sources, and other rarely changed settings",
           "plugins_title": "Plugins",

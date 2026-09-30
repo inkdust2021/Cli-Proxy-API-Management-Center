@@ -358,6 +358,14 @@ export const CONFIG_FIELD_SEARCH_INDEX: ConfigFieldSearchEntry[] = [
     hintKey: L('sections.system.antigravity_signature_strict_desc'),
     yamlKeys: ['oauth', 'providers', 'antigravity', 'signature-bypass-strict'],
   },
+  {
+    fieldId: 'claudeCacheKeepalive',
+    sectionId: 'advanced',
+    labelKey: L('sections.advanced.claude_cache_keepalive'),
+    hintKey: L('sections.advanced.claude_cache_keepalive_desc'),
+    yamlKeys: ['oauth', 'providers', 'claude', 'cache-keepalive'],
+    keywords: ['claude', 'prompt cache', 'keepalive', '缓存', '保活'],
+  },
   // Claude header defaults — qualifierKey disambiguates the shared "User-Agent" label.
   {
     fieldId: 'claudeHeaderUserAgent',

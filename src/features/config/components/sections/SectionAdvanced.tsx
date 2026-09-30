@@ -22,7 +22,7 @@ import { StringListEditor } from '../blocks/StringListEditor';
 
 const Icon = CONFIG_TAB_ICONS.advanced;
 
-/** 06 高级与实验：插件源、供应商敏感词、签名缓存与请求头默认值。 */
+/** Advanced settings: native cache renewal, plugins, and provider request defaults. */
 export function SectionAdvanced({ values, disabled, animateIn, onChange }: ConfigSectionProps) {
   const { t } = useTranslation();
 
@@ -52,6 +52,20 @@ export function SectionAdvanced({ values, disabled, animateIn, onChange }: Confi
       animateIn={animateIn}
     >
       <FieldStack>
+        <FieldGroup title={t('config_management.visual.sections.advanced.claude_title')}>
+          <FieldAnchor fieldId="claudeCacheKeepalive">
+            <ToggleRow
+              title={t('config_management.visual.sections.advanced.claude_cache_keepalive')}
+              description={t(
+                'config_management.visual.sections.advanced.claude_cache_keepalive_desc'
+              )}
+              checked={values.claudeCacheKeepalive}
+              disabled={disabled}
+              onChange={(claudeCacheKeepalive) => onChange({ claudeCacheKeepalive })}
+            />
+          </FieldAnchor>
+        </FieldGroup>
+
         <Collapsible
           label={t('config_management.visual.sections.advanced.plugins_title')}
           defaultOpen={false}

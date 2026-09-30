@@ -142,6 +142,7 @@ export const FIELD_VALUE_KEYS: Record<string, readonly string[]> = {
   devinSensitiveWords: ['devinSensitiveWords'],
   antigravitySignatureCacheEnabled: ['antigravitySignatureCacheEnabled'],
   antigravitySignatureBypassStrict: ['antigravitySignatureBypassStrict'],
+  claudeCacheKeepalive: ['claudeCacheKeepalive'],
   claudeHeaderUserAgent: ['claudeHeaderUserAgent'],
   claudeHeaderPackageVersion: ['claudeHeaderPackageVersion'],
   claudeHeaderRuntimeVersion: ['claudeHeaderRuntimeVersion'],

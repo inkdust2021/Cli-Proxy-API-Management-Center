@@ -129,6 +129,7 @@ export type VisualConfigValues = {
   devinSensitiveWords: string[];
   antigravitySignatureCacheEnabled: boolean;
   antigravitySignatureBypassStrict: boolean;
+  claudeCacheKeepalive: boolean;
   claudeHeaderUserAgent: string;
   claudeHeaderPackageVersion: string;
   claudeHeaderRuntimeVersion: string;
@@ -195,6 +196,7 @@ export const DEFAULT_VISUAL_VALUES: VisualConfigValues = {
   devinSensitiveWords: [],
   antigravitySignatureCacheEnabled: true,
   antigravitySignatureBypassStrict: false,
+  claudeCacheKeepalive: false,
   claudeHeaderUserAgent: '',
   claudeHeaderPackageVersion: '',
   claudeHeaderRuntimeVersion: '',
