@@ -1,6 +1,7 @@
 import { useDeferredValue, useEffect, useMemo, useReducer, useState } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -44,13 +45,14 @@ import { HTTP_METHODS, STATUS_GROUPS, type LogState } from './model/logTypes';
 import { createLogRequestGuard } from './model/logRequests';
 import { errorLogViewerReducer } from './model/errorLogViewer';
 import { shouldExitLogFullscreen } from './model/logFullscreen';
+import { KeepaliveLogsPanel } from './KeepaliveLogsPanel';
 import { useLogFilters } from './hooks/useLogFilters';
 import { isNearBottom, useLogScroller } from './hooks/useLogScroller';
 import styles from './LogsPage.module.scss';
 
 const INITIAL_DISPLAY_LINES = INITIAL_VISIBLE_LINES;
 
-type TabType = 'logs' | 'errors';
+type TabType = 'logs' | 'errors' | 'keepalive';
 
 export function LogsPage() {
   const { t } = useTranslation();
@@ -61,7 +63,11 @@ export function LogsPage() {
   const config = useConfigStore((state) => state.config);
   const requestLogEnabled = config?.requestLog ?? false;
 
-  const [activeTab, setActiveTab] = useState<TabType>('logs');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const requestedTab = searchParams.get('tab');
+  const activeTab: TabType =
+    requestedTab === 'errors' || requestedTab === 'keepalive' ? requestedTab : 'logs';
+  const setActiveTab = (tab: TabType) => setSearchParams({ tab });
   const [searchQuery, setSearchQuery] = useState('');
   const deferredSearchQuery = useDeferredValue(searchQuery);
   const [hideManagementLogs, setHideManagementLogs] = useLocalStorage(
@@ -132,7 +138,7 @@ export function LogsPage() {
     try {
       const res = await logsApi.fetchErrorLogs();
       if (!requests.errors.isCurrent(request)) return;
-      // API 返回 { files: [...] }
+      // The API returns { files: [...] }.
       setErrorLogs(Array.isArray(res.files) ? res.files : []);
     } catch (err: unknown) {
       if (!requests.errors.isCurrent(request)) return;
@@ -147,7 +153,10 @@ export function LogsPage() {
     }
   };
 
-  useHeaderRefresh(() => (activeTab === 'errors' ? loadErrorLogs() : loadLogs(false)));
+  useHeaderRefresh(
+    () => (activeTab === 'errors' ? loadErrorLogs() : loadLogs(false)),
+    activeTab !== 'keepalive'
+  );
 
   const downloadErrorLog = async (name: string) => {
     const session = requests.session.capture();
@@ -421,10 +430,22 @@ export function LogsPage() {
           >
             {t('logs.error_logs_modal_title')}
           </button>
+          <button
+            type="button"
+            className={`${styles.tabItem} ${activeTab === 'keepalive' ? styles.tabActive : ''}`}
+            aria-pressed={activeTab === 'keepalive'}
+            onClick={() => {
+              setFullscreenLogs(false);
+              setActiveTab('keepalive');
+            }}
+          >
+            {t('logs.keepalive.title')}
+          </button>
         </div>
       </header>
 
       <div className={styles.content}>
+        {activeTab === 'keepalive' && <KeepaliveLogsPanel />}
         {activeTab === 'logs' && (
           <Card
             className={[styles.logCard, fullscreenLogs ? styles.logCardFullscreen : '']

@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { MemoryRouter } from 'react-router-dom';
 import { parse as parseYaml } from 'yaml';
 import i18n from '../src/i18n';
 import { SectionAdvanced } from '../src/features/config/components/sections/SectionAdvanced';
@@ -87,10 +88,12 @@ plugins: {enabled: false}
       'oauth: {providers: {claude: {cache-keepalive: true}}}'
     ).visualValues;
     const markup = renderToStaticMarkup(
-      createElement(SectionAdvanced, {
-        values,
-        disabled: true,
-        onChange: () => {},
+      createElement(MemoryRouter, {
+        children: createElement(SectionAdvanced, {
+          values,
+          disabled: true,
+          onChange: () => {},
+        }),
       })
     );
     expect(markup).toContain('id="cfg-field-claudeCacheKeepalive"');
@@ -99,6 +102,7 @@ plugins: {enabled: false}
     const switchTag = markup.match(new RegExp(`<[^>]*aria-label="${label}"[^>]*>`))?.[0];
     expect(switchTag).toContain('disabled=""');
     expect(switchTag).toContain('checked=""');
+    expect(markup).toContain('href="/logs?tab=keepalive"');
   });
 
   test('all locales explain renewal intervals and billable cache reads', () => {

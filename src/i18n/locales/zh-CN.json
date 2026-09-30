@@ -898,6 +898,38 @@
     "no_requests": "无请求"
   },
   "logs": {
+    "keepalive": {
+      "title": "Claude 保活",
+      "view_logs": "查看保活日志",
+      "enabled": "保活已开启",
+      "disabled": "保活已关闭",
+      "sessions": "跟踪会话：{{count}} · 已暂停：{{paused}}",
+      "settings": "保活设置",
+      "retention": "仅在内存中保留最近 {{count}} 条事件，重启后清空。无需开启文件日志。",
+      "search": "搜索模型、账号或会话标识",
+      "all": "全部结果",
+      "auto_refresh": "每 10 秒刷新",
+      "unsupported": "当前后端不支持保活日志，请更新 CLIProxyAPI 后使用此页面。",
+      "time": "时间",
+      "model": "模型",
+      "identity": "账号 / 会话（脱敏）",
+      "result": "结果",
+      "cache_read": "缓存读取 Token",
+      "duration": "耗时",
+      "paused": "会话已暂停，发送一次成功的新聊天请求后可重新跟踪。",
+      "empty": "暂无匹配的保活记录",
+      "empty_desc": "开启保活后发送可缓存的 Claude 请求。5 分钟缓存约 4 分钟后续期，1 小时缓存约 50 分钟后续期。若已有记录，请检查筛选条件。",
+      "outcomes": {
+        "enabled": "已开启",
+        "disabled": "已关闭",
+        "tracked": "已跟踪会话",
+        "renewed": "续期成功",
+        "cache_miss": "缓存未命中",
+        "failed": "保活失败",
+        "cancelled": "保活已取消",
+        "expired": "缓存已过期"
+      }
+    },
     "preview_too_large": "报文超过 2 MiB 预览限制，请下载查看",
     "read_status_live": "持续读取",
     "read_status_paused": "读取已暂停",

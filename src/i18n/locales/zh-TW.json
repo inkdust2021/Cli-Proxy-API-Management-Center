@@ -924,6 +924,38 @@
     "no_requests": "無請求"
   },
   "logs": {
+    "keepalive": {
+      "title": "Claude 保活",
+      "view_logs": "查看保活日誌",
+      "enabled": "保活已開啟",
+      "disabled": "保活已關閉",
+      "sessions": "追蹤對話：{{count}} · 已暫停：{{paused}}",
+      "settings": "保活設定",
+      "retention": "僅在記憶體中保留最近 {{count}} 筆事件，重新啟動後清空。不需開啟檔案日誌。",
+      "search": "搜尋模型、帳號或對話識別碼",
+      "all": "全部結果",
+      "auto_refresh": "每 10 秒重新整理",
+      "unsupported": "目前後端不支援保活日誌，請更新 CLIProxyAPI 後使用此頁面。",
+      "time": "時間",
+      "model": "模型",
+      "identity": "帳號 / 對話（去識別）",
+      "result": "結果",
+      "cache_read": "快取讀取 Token",
+      "duration": "耗時",
+      "paused": "對話已暫停，傳送一次成功的新聊天請求後可重新追蹤。",
+      "empty": "尚無符合的保活紀錄",
+      "empty_desc": "開啟保活後傳送可快取的 Claude 請求。5 分鐘快取約 4 分鐘後續期，1 小時快取約 50 分鐘後續期。若已有紀錄，請檢查篩選條件。",
+      "outcomes": {
+        "enabled": "已開啟",
+        "disabled": "已關閉",
+        "tracked": "已追蹤對話",
+        "renewed": "續期成功",
+        "cache_miss": "快取未命中",
+        "failed": "保活失敗",
+        "cancelled": "保活已取消",
+        "expired": "快取已過期"
+      }
+    },
     "preview_too_large": "封包超過 2 MiB 預覽限制，請下載查看",
     "read_status_live": "持續讀取",
     "read_status_paused": "讀取已暫停",

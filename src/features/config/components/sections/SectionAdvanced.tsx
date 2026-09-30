@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { Collapsible } from '@/components/ui/Collapsible';
 import { Input } from '@/components/ui/Input';
 import type { PluginStoreAuthRule } from '@/types/visualConfig';
@@ -64,6 +65,7 @@ export function SectionAdvanced({ values, disabled, animateIn, onChange }: Confi
               onChange={(claudeCacheKeepalive) => onChange({ claudeCacheKeepalive })}
             />
           </FieldAnchor>
+          <Link to="/logs?tab=keepalive">{t('logs.keepalive.view_logs')}</Link>
         </FieldGroup>
 
         <Collapsible

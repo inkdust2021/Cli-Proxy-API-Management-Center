@@ -900,6 +900,38 @@
     "no_requests": "No requests"
   },
   "logs": {
+    "keepalive": {
+      "title": "Claude keepalive",
+      "view_logs": "View keepalive logs",
+      "enabled": "Keepalive enabled",
+      "disabled": "Keepalive disabled",
+      "sessions": "Tracked sessions: {{count}} · Paused: {{paused}}",
+      "settings": "Keepalive settings",
+      "retention": "Most recent {{count}} events, in memory only. Restarting clears them. Does not require file logging.",
+      "search": "Search model, account or session ID",
+      "all": "All results",
+      "auto_refresh": "Refresh every 10 seconds",
+      "unsupported": "This backend does not support keepalive logs. Update CLIProxyAPI to use this view.",
+      "time": "Time",
+      "model": "Model",
+      "identity": "Account / session (masked)",
+      "result": "Result",
+      "cache_read": "Cache read tokens",
+      "duration": "Duration",
+      "paused": "Session paused; send a successful new chat to resume.",
+      "empty": "No matching keepalive events",
+      "empty_desc": "Enable keepalive and send a cacheable Claude request. Tracked sessions renew after 4 minutes (5m TTL) or 50 minutes (1h TTL). Check active filters if records are missing.",
+      "outcomes": {
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "tracked": "Session tracked",
+        "renewed": "Cache renewed",
+        "cache_miss": "Cache miss",
+        "failed": "Replay failed",
+        "cancelled": "Replay cancelled",
+        "expired": "Cache expired"
+      }
+    },
     "preview_too_large": "This request log exceeds the 2 MiB preview limit. Download it to view.",
     "read_status_live": "Reading continuously",
     "read_status_paused": "Reading paused",
