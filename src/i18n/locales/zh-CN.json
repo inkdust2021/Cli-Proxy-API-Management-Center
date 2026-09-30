@@ -927,7 +927,32 @@
         "cache_miss": "缓存未命中",
         "failed": "保活失败",
         "cancelled": "保活已取消",
-        "expired": "缓存已过期"
+        "expired": "缓存已过期",
+        "session_enabled": "会话已开启",
+        "session_disabled": "会话已关闭"
+      },
+      "manager_title": "Claude 保活管理",
+      "session_title": "当前会话",
+      "event_title": "事件日志",
+      "disabled_count": "手动关闭：{{count}}",
+      "session_search": "搜索会话的 prompt、模型或标识",
+      "session_hint": "每个账号／模型／会话只显示一行。开关立即保存，重启后仍有效；关闭后继续聊天也不会自动开启。预览显示最近成功缓存快照中的最后一条用户文本，最多 2,000 字，不含工具结果和图片。Prompt 仅保存在内存中，重启后清空。",
+      "no_sessions": "暂无匹配的会话",
+      "last_prompt": "最后用户 Prompt",
+      "prompt_unavailable": "暂无文本预览（或快照已清空）",
+      "session_state": "状态",
+      "last_activity": "最后聊天",
+      "next_renewal": "下次续期",
+      "renew_session": "保活开关",
+      "toggle_session": "会话 {{session}} 的保活开关",
+      "session_unsupported": "请更新 CLIProxyAPI 后管理单个会话，当前仍可查看事件日志。",
+      "states": {
+        "active": "跟踪中",
+        "disabled": "已手动关闭",
+        "paused": "失败后暂停",
+        "expired": "缓存已过期",
+        "renewing": "续期中",
+        "updating": "聊天请求中"
       }
     },
     "preview_too_large": "报文超过 2 MiB 预览限制，请下载查看",

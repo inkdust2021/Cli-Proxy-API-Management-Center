@@ -929,7 +929,32 @@
         "cache_miss": "Cache miss",
         "failed": "Replay failed",
         "cancelled": "Replay cancelled",
-        "expired": "Cache expired"
+        "expired": "Cache expired",
+        "session_enabled": "Session enabled",
+        "session_disabled": "Session disabled"
+      },
+      "manager_title": "Claude keepalive manager",
+      "session_title": "Current sessions",
+      "event_title": "Event history",
+      "disabled_count": "Manually disabled: {{count}}",
+      "session_search": "Search sessions by prompt, model or identity",
+      "session_hint": "One row per account/model/session. Changes save immediately and survive restarts. A disabled session stays disabled when you continue chatting. Previews show the latest user text in its successful cache snapshot (up to 2,000 characters); tool results and images are excluded. Prompts stay in memory and disappear on restart.",
+      "no_sessions": "No matching sessions",
+      "last_prompt": "Last user prompt",
+      "prompt_unavailable": "No text preview (or snapshot cleared)",
+      "session_state": "State",
+      "last_activity": "Last chat",
+      "next_renewal": "Next renewal",
+      "renew_session": "Keepalive",
+      "toggle_session": "Renew session {{session}}",
+      "session_unsupported": "Update CLIProxyAPI to manage individual sessions. Event history is still available.",
+      "states": {
+        "active": "Tracking",
+        "disabled": "Manually disabled",
+        "paused": "Paused after failure",
+        "expired": "Cache expired",
+        "renewing": "Renewing",
+        "updating": "Chat in progress"
       }
     },
     "preview_too_large": "This request log exceeds the 2 MiB preview limit. Download it to view.",

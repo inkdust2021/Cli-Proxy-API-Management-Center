@@ -10,7 +10,7 @@ export function KeepaliveEvents({ events }: { events: ClaudeCacheKeepaliveEvent[
     );
   }
   return (
-    <table aria-label={t('logs.keepalive.title')}>
+    <table aria-label={t('logs.keepalive.event_title')}>
       <thead>
         <tr>
           {['time', 'model', 'identity', 'result', 'cache_read', 'duration'].map((key) => (

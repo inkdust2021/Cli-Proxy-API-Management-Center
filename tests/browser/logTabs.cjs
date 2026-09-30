@@ -42,7 +42,7 @@ const assert = require('node:assert/strict');
       );
     };
     await check('Claude 保活', 'tab=keepalive');
-    await page.getByRole('table', { name: 'Claude 保活', exact: true }).waitFor();
+    await page.getByRole('table', { name: '事件日志', exact: true }).waitFor();
     await check('错误请求日志', 'tab=errors');
     await check('日志内容', 'tab=logs');
     await page.goBack();
@@ -60,12 +60,12 @@ const assert = require('node:assert/strict');
     await page.goto(
       `${(process.env.MANAGEMENT_URL || 'http://127.0.0.1:18317/management.html').split('#')[0]}#/logs?tab=keepalive`
     );
-    await page.getByRole('table', { name: 'Claude 保活', exact: true }).waitFor();
+    await page.getByRole('table', { name: '事件日志', exact: true }).waitFor();
     await page.locator('a[href="#/config?field=claudeCacheKeepalive"]').click();
     await page.waitForURL((u) => u.hash === '#/config?field=claudeCacheKeepalive');
     await page.waitForFunction(() => !document.querySelector('.page-transition--animating'));
     await page.goBack();
-    await page.getByRole('table', { name: 'Claude 保活', exact: true }).waitFor();
+    await page.getByRole('table', { name: '事件日志', exact: true }).waitFor();
     await page.waitForFunction(() => !document.querySelector('.page-transition--animating'));
     await page.setViewportSize({ width: 390, height: 844 });
     for (const name of ['错误请求日志', '日志内容', 'Claude 保活']) {

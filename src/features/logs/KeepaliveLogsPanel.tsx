@@ -6,17 +6,19 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { ToggleSwitch } from '@/components/ui/ToggleSwitch';
-import { useAuthStore } from '@/stores';
+import { useAuthStore, useConfigStore } from '@/stores';
 import { useHeaderRefresh } from '@/hooks/useHeaderRefresh';
 import { getErrorMessage } from '@/utils/helpers';
 import {
   claudeCacheKeepaliveApi,
   KEEPALIVE_OUTCOMES,
   type ClaudeCacheKeepaliveLogs,
+  type ClaudeCacheKeepaliveSession,
 } from '@/services/api/claudeCacheKeepalive';
 import { createLogRequestGuard } from './model/logRequests';
+import { KeepaliveSessions } from './KeepaliveSessions';
 import { KeepaliveEvents } from './KeepaliveEvents';
-import { filterKeepaliveEvents } from './model/keepaliveLogs';
+import { filterKeepaliveEvents, filterKeepaliveSessions } from './model/keepaliveLogs';
 import styles from './KeepaliveLogsPanel.module.scss';
 
 export function KeepaliveLogsPanel() {
@@ -29,6 +31,9 @@ export function KeepaliveLogsPanel() {
   const [loading, setLoading] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [query, setQuery] = useState('');
+  const [sessionQuery, setSessionQuery] = useState('');
+  const [mutating, setMutating] = useState(false);
+  const mutationRef = useRef(false);
   const [outcome, setOutcome] = useState('all');
   const [guard] = useState(createLogRequestGuard);
   const requestRef = useRef<AbortController | null>(null);
@@ -61,11 +66,42 @@ export function KeepaliveLogsPanel() {
   }, [guard, t]);
   useHeaderRefresh(refresh);
 
+  const toggleSession = async (session: ClaudeCacheKeepaliveSession, enabled: boolean) => {
+    if (useAuthStore.getState().connectionStatus !== 'connected' || mutationRef.current) return;
+    const request = guard.invalidate();
+    requestRef.current?.abort();
+    const controller = new AbortController();
+    requestRef.current = controller;
+    mutationRef.current = true;
+    setMutating(true);
+    setLoading(true);
+    setError('');
+    try {
+      await claudeCacheKeepaliveApi.setSessionEnabled(session.id, enabled, {
+        signal: controller.signal,
+      });
+      if (!guard.isCurrent(request)) return;
+      useConfigStore.getState().clearCache();
+      const snapshot = await claudeCacheKeepaliveApi.getLogs({ signal: controller.signal });
+      if (guard.isCurrent(request)) setData(snapshot);
+    } catch (err: unknown) {
+      if (guard.isCurrent(request)) setError(getErrorMessage(err) || t('logs.load_error'));
+    } finally {
+      if (guard.isCurrent(request)) {
+        requestRef.current = null;
+        mutationRef.current = false;
+        setMutating(false);
+        setLoading(false);
+      }
+    }
+  };
+
   useEffect(() => {
     const invalidate = () => {
       guard.invalidate();
       requestRef.current?.abort();
       requestRef.current = null;
+      mutationRef.current = false;
     };
     const unsubscribe = useAuthStore.subscribe((next, previous) => {
       if (
@@ -78,6 +114,8 @@ export function KeepaliveLogsPanel() {
         setData(null);
         setError('');
         setLoading(false);
+        setMutating(false);
+        setSessionQuery('');
       }
     });
     return () => {
@@ -101,7 +139,7 @@ export function KeepaliveLogsPanel() {
   return (
     <Card
       className={styles.panel}
-      title={t('logs.keepalive.title')}
+      title={t('logs.keepalive.manager_title')}
       extra={
         <Button
           variant="secondary"
@@ -121,50 +159,78 @@ export function KeepaliveLogsPanel() {
         {data && (
           <span>
             {t('logs.keepalive.sessions', { count: data.sessions, paused: data.pausedSessions })}
+            {' · '}
+            {t('logs.keepalive.disabled_count', { count: data.disabledSessions })}
           </span>
         )}
         <Link to="/config?field=claudeCacheKeepalive">{t('logs.keepalive.settings')}</Link>
-      </div>
-      <p className="hint">{t('logs.keepalive.retention', { count: data?.capacity ?? 200 })}</p>
-      <div className={styles.controls}>
-        <Input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={t('logs.keepalive.search')}
-          aria-label={t('logs.keepalive.search')}
-        />
-        <Select
-          className={styles.resultFilter}
-          fullWidth={false}
-          value={outcome}
-          onChange={setOutcome}
-          ariaLabel={t('logs.keepalive.result')}
-          options={[
-            { value: 'all', label: t('logs.keepalive.all') },
-            ...KEEPALIVE_OUTCOMES.map((value) => ({
-              value,
-              label: t(`logs.keepalive.outcomes.${value}`),
-            })),
-          ]}
-        />
-        <ToggleSwitch
-          checked={autoRefresh}
-          onChange={setAutoRefresh}
-          disabled={disabled}
-          label={t('logs.keepalive.auto_refresh')}
-        />
       </div>
       {error && (
         <div className="error-box" role="alert">
           {error}
         </div>
       )}
-      <div className={styles.events} aria-busy={loading}>
-        {loading && !data ? (
-          <div className="hint">{t('common.loading')}</div>
-        ) : !error || data ? (
-          <KeepaliveEvents events={events} />
-        ) : null}
+      <div className={styles.content} aria-busy={loading}>
+        <section className={styles.sessions} aria-label={t('logs.keepalive.session_title')}>
+          <h3>{t('logs.keepalive.session_title')}</h3>
+          <p className="hint">{t('logs.keepalive.session_hint')}</p>
+          <Input
+            value={sessionQuery}
+            onChange={(e) => setSessionQuery(e.target.value)}
+            placeholder={t('logs.keepalive.session_search')}
+            aria-label={t('logs.keepalive.session_search')}
+          />
+          <div className={styles.tableScroll}>
+            {loading && !data ? (
+              <div className="hint">{t('common.loading')}</div>
+            ) : data && !data.supportsSessions ? (
+              <p className="hint">{t('logs.keepalive.session_unsupported')}</p>
+            ) : (
+              <KeepaliveSessions
+                sessions={filterKeepaliveSessions(data?.sessionDetails ?? [], sessionQuery)}
+                disabled={disabled || mutating}
+                onToggle={(session, enabled) => void toggleSession(session, enabled)}
+              />
+            )}
+          </div>
+        </section>
+        <h3>{t('logs.keepalive.event_title')}</h3>
+        <p className="hint">{t('logs.keepalive.retention', { count: data?.capacity ?? 200 })}</p>
+        <div className={styles.controls}>
+          <Input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={t('logs.keepalive.search')}
+            aria-label={t('logs.keepalive.search')}
+          />
+          <Select
+            className={styles.resultFilter}
+            fullWidth={false}
+            value={outcome}
+            onChange={setOutcome}
+            ariaLabel={t('logs.keepalive.result')}
+            options={[
+              { value: 'all', label: t('logs.keepalive.all') },
+              ...KEEPALIVE_OUTCOMES.map((value) => ({
+                value,
+                label: t(`logs.keepalive.outcomes.${value}`),
+              })),
+            ]}
+          />
+          <ToggleSwitch
+            checked={autoRefresh}
+            onChange={setAutoRefresh}
+            disabled={disabled}
+            label={t('logs.keepalive.auto_refresh')}
+          />
+        </div>
+        <div className={styles.events} aria-busy={loading}>
+          {loading && !data ? (
+            <div className="hint">{t('common.loading')}</div>
+          ) : !error || data ? (
+            <KeepaliveEvents events={events} />
+          ) : null}
+        </div>
       </div>
     </Card>
   );

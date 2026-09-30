@@ -84,7 +84,10 @@ describe('Claude keepalive event viewer', () => {
       expect(Object.keys(locale.logs.keepalive.outcomes).sort()).toEqual(
         Object.keys(en.logs.keepalive.outcomes).sort()
       );
-      for (const key of ['sessions', 'retention'] as const) {
+      expect(Object.keys(locale.logs.keepalive.states).sort()).toEqual(
+        Object.keys(en.logs.keepalive.states).sort()
+      );
+      for (const key of ['sessions', 'retention', 'disabled_count', 'toggle_session'] as const) {
         expect(locale.logs.keepalive[key].match(/\{\{\w+\}\}/g)).toEqual(
           en.logs.keepalive[key].match(/\{\{\w+\}\}/g)
         );
