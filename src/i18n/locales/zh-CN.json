@@ -945,6 +945,10 @@
       "next_renewal": "下次续期",
       "renew_session": "保活开关",
       "toggle_session": "会话 {{session}} 的保活开关",
+      "delete_session": "删除",
+      "delete_session_label": "删除会话 {{session}}",
+      "delete_session_title": "删除保活会话",
+      "delete_session_confirm": "删除会话 {{session}} 的保活快照和关闭偏好，并停止续期？历史日志会保留。同一会话再次发送新消息时，可以重新进入保活列表。",
       "session_unsupported": "请更新 CLIProxyAPI 后管理单个会话，当前仍可查看事件日志。",
       "states": {
         "active": "跟踪中",

@@ -1,15 +1,18 @@
 import { useTranslation } from 'react-i18next';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ToggleSwitch } from '@/components/ui/ToggleSwitch';
+import { Button } from '@/components/ui/Button';
 import type { ClaudeCacheKeepaliveSession } from '@/services/api/claudeCacheKeepalive';
 
 export function KeepaliveSessions({
   sessions,
   onToggle,
+  onDelete,
   disabled,
 }: {
   sessions: ClaudeCacheKeepaliveSession[];
   onToggle: (session: ClaudeCacheKeepaliveSession, enabled: boolean) => void;
+  onDelete: (session: ClaudeCacheKeepaliveSession) => void;
   disabled: boolean;
 }) {
   const { t } = useTranslation();
@@ -32,6 +35,7 @@ export function KeepaliveSessions({
             'last_activity',
             'next_renewal',
             'renew_session',
+            'delete_session',
           ].map((key) => (
             <th key={key} scope="col">
               {t(`logs.keepalive.${key}`)}
@@ -86,6 +90,18 @@ export function KeepaliveSessions({
                 ariaLabel={t('logs.keepalive.toggle_session', { session: session.session })}
                 onChange={(enabled) => onToggle(session, enabled)}
               />
+            </td>
+            <td>
+              <Button
+                type="button"
+                variant="danger"
+                size="sm"
+                disabled={disabled}
+                aria-label={t('logs.keepalive.delete_session_label', { session: session.session })}
+                onClick={() => onDelete(session)}
+              >
+                {t('logs.keepalive.delete_session')}
+              </Button>
             </td>
           </tr>
         ))}

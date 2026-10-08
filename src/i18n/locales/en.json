@@ -947,6 +947,10 @@
       "next_renewal": "Next renewal",
       "renew_session": "Keepalive",
       "toggle_session": "Renew session {{session}}",
+      "delete_session": "Delete",
+      "delete_session_label": "Delete session {{session}}",
+      "delete_session_title": "Delete keepalive session",
+      "delete_session_confirm": "Delete the keepalive snapshot and disabled preference for session {{session}} and stop renewal? Event history will remain. Sending a new message to this conversation can add it again.",
       "session_unsupported": "Update CLIProxyAPI to manage individual sessions. Event history is still available.",
       "states": {
         "active": "Tracking",

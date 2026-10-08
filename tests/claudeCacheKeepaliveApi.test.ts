@@ -2,6 +2,23 @@ import { describe, expect, spyOn, test } from 'bun:test';
 import { apiClient } from '@/services/api/client';
 import { claudeCacheKeepaliveApi } from '@/services/api/claudeCacheKeepalive';
 
+test('deletes the selected session through v8 and forwards cancellation and errors', async () => {
+  const remove = spyOn(apiClient, 'delete').mockResolvedValue({ status: 'ok' });
+  try {
+    const signal = new AbortController().signal;
+    await claudeCacheKeepaliveApi.deleteSession('a/b #', { signal });
+    expect(remove).toHaveBeenCalledWith(
+      '/observability/claude-cache-keepalive/sessions/a%2Fb%20%23',
+      { signal }
+    );
+    const error = Object.assign(new Error('snapshot could not be saved'), { status: 500 });
+    remove.mockRejectedValue(error);
+    await expect(claudeCacheKeepaliveApi.deleteSession('a')).rejects.toBe(error);
+  } finally {
+    remove.mockRestore();
+  }
+});
+
 describe('Claude cache keepalive logs API', () => {
   test('reads a non-destructive v8 snapshot and forwards cancellation', async () => {
     const get = spyOn(apiClient, 'get').mockResolvedValue({

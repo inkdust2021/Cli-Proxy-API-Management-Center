@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { ToggleSwitch } from '@/components/ui/ToggleSwitch';
-import { useAuthStore, useConfigStore } from '@/stores';
+import { useAuthStore, useConfigStore, useNotificationStore } from '@/stores';
 import { useHeaderRefresh } from '@/hooks/useHeaderRefresh';
 import { getErrorMessage } from '@/utils/helpers';
 import {
@@ -34,6 +34,7 @@ export function KeepaliveLogsPanel() {
   const [sessionQuery, setSessionQuery] = useState('');
   const [mutating, setMutating] = useState(false);
   const mutationRef = useRef(false);
+  const connectionGenerationRef = useRef(0);
   const [outcome, setOutcome] = useState('all');
   const [guard] = useState(createLogRequestGuard);
   const requestRef = useRef<AbortController | null>(null);
@@ -66,7 +67,7 @@ export function KeepaliveLogsPanel() {
   }, [guard, t]);
   useHeaderRefresh(refresh);
 
-  const toggleSession = async (session: ClaudeCacheKeepaliveSession, enabled: boolean) => {
+  const updateSession = async (change: (signal: AbortSignal) => Promise<void>) => {
     if (useAuthStore.getState().connectionStatus !== 'connected' || mutationRef.current) return;
     const request = guard.invalidate();
     requestRef.current?.abort();
@@ -77,9 +78,7 @@ export function KeepaliveLogsPanel() {
     setLoading(true);
     setError('');
     try {
-      await claudeCacheKeepaliveApi.setSessionEnabled(session.id, enabled, {
-        signal: controller.signal,
-      });
+      await change(controller.signal);
       if (!guard.isCurrent(request)) return;
       useConfigStore.getState().clearCache();
       const snapshot = await claudeCacheKeepaliveApi.getLogs({ signal: controller.signal });
@@ -96,8 +95,28 @@ export function KeepaliveLogsPanel() {
     }
   };
 
+  const toggleSession = (session: ClaudeCacheKeepaliveSession, enabled: boolean) =>
+    updateSession((signal) =>
+      claudeCacheKeepaliveApi.setSessionEnabled(session.id, enabled, { signal })
+    );
+
+  const deleteSession = (session: ClaudeCacheKeepaliveSession) => {
+    const connection = connectionGenerationRef.current;
+    useNotificationStore.getState().showConfirmation({
+      title: t('logs.keepalive.delete_session_title'),
+      message: t('logs.keepalive.delete_session_confirm', { session: session.session }),
+      confirmText: t('logs.keepalive.delete_session'),
+      variant: 'danger',
+      onConfirm: async () => {
+        if (connection !== connectionGenerationRef.current) return;
+        await updateSession((signal) => claudeCacheKeepaliveApi.deleteSession(session.id, { signal }));
+      },
+    });
+  };
+
   useEffect(() => {
     const invalidate = () => {
+      connectionGenerationRef.current++;
       guard.invalidate();
       requestRef.current?.abort();
       requestRef.current = null;
@@ -190,6 +209,7 @@ export function KeepaliveLogsPanel() {
                 sessions={filterKeepaliveSessions(data?.sessionDetails ?? [], sessionQuery)}
                 disabled={disabled || mutating}
                 onToggle={(session, enabled) => void toggleSession(session, enabled)}
+                onDelete={deleteSession}
               />
             )}
           </div>

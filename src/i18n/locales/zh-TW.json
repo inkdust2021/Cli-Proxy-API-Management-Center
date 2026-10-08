@@ -971,6 +971,10 @@
       "next_renewal": "下次續期",
       "renew_session": "保活開關",
       "toggle_session": "會話 {{session}} 的保活開關",
+      "delete_session": "刪除",
+      "delete_session_label": "刪除對話 {{session}}",
+      "delete_session_title": "刪除保活對話",
+      "delete_session_confirm": "刪除對話 {{session}} 的保活快照及關閉偏好，並停止續期？歷史日誌會保留。同一對話再次傳送新訊息時，可重新進入保活清單。",
       "session_unsupported": "請更新 CLIProxyAPI 後管理個別會話，目前仍可檢視事件日誌。",
       "states": {
         "active": "追蹤中",

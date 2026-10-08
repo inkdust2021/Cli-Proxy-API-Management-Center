@@ -68,6 +68,12 @@ const timestamp = (value: unknown) =>
     : '';
 
 export const claudeCacheKeepaliveApi = {
+  async deleteSession(id: string, options: { signal?: AbortSignal } = {}) {
+    await apiClient.delete(
+      `/observability/claude-cache-keepalive/sessions/${encodeURIComponent(id)}`,
+      options
+    );
+  },
   async setSessionEnabled(id: string, enabled: boolean, options: { signal?: AbortSignal } = {}) {
     await apiClient.patch(
       `/observability/claude-cache-keepalive/sessions/${encodeURIComponent(id)}`,
