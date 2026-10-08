@@ -1147,6 +1147,8 @@
           "claude_title": "Claude",
           "claude_cache_keepalive": "Claude 提示詞快取保活",
           "claude_cache_keepalive_desc": "使用原帳號自動續期符合條件的對話：5 分鐘快取每 4 分鐘、1 小時快取每 50 分鐘重播，最多輸出 1 個 token。快取讀取仍會計費。預設關閉，儲存後無需重新啟動即可生效；Home 模式不可用。",
+          "claude_cache_keepalive_reserve_quota": "為保活預留 1% 額度",
+          "claude_cache_keepalive_reserve_quota_desc": "開啟 Claude 保活後，若 5 小時或週額度任一項剩餘 ≤1%，或依近期輸入、輸出及快取 token 預測下一次聊天會越過此線，普通聊天將跳過該 OAuth 帳號。預測須先累積足夠的真實額度回報；保活仍可使用剩餘額度，重設後恢復聊天。預設關閉。",
           "title": "進階與實驗",
           "description": "請求標頭偽裝、簽章快取、外掛來源等不常修改的設定",
           "plugins_title": "外掛",

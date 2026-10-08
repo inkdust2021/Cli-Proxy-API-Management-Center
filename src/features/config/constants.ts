@@ -143,6 +143,7 @@ export const FIELD_VALUE_KEYS: Record<string, readonly string[]> = {
   antigravitySignatureCacheEnabled: ['antigravitySignatureCacheEnabled'],
   antigravitySignatureBypassStrict: ['antigravitySignatureBypassStrict'],
   claudeCacheKeepalive: ['claudeCacheKeepalive'],
+  claudeCacheKeepaliveReserveQuota: ['claudeCacheKeepaliveReserveQuota'],
   claudeHeaderUserAgent: ['claudeHeaderUserAgent'],
   claudeHeaderPackageVersion: ['claudeHeaderPackageVersion'],
   claudeHeaderRuntimeVersion: ['claudeHeaderRuntimeVersion'],

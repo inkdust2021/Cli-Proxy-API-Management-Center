@@ -1121,6 +1121,8 @@
           "claude_title": "Claude",
           "claude_cache_keepalive": "Claude 提示词缓存保活",
           "claude_cache_keepalive_desc": "使用原账号自动续期符合条件的会话：5 分钟缓存每 4 分钟、1 小时缓存每 50 分钟重放，最多输出 1 个 token。缓存读取仍会计费。默认关闭，保存后无需重启即可生效；Home 模式不可用。",
+          "claude_cache_keepalive_reserve_quota": "为保活预留 1% 额度",
+          "claude_cache_keepalive_reserve_quota_desc": "开启 Claude 保活后，若 5 小时或周额度任一项剩余 ≤1%，或根据近期输入、输出及缓存 token 预测下一次聊天会越过此线，普通聊天将跳过该 OAuth 账号。预测需先积累足够的真实额度回报；保活仍可使用剩余额度，重置后恢复聊天。默认关闭。",
           "title": "高级与实验",
           "description": "请求头伪装、签名缓存、插件源等不常修改的设置",
           "plugins_title": "插件",

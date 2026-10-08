@@ -1186,6 +1186,7 @@ function getNextDirtyFields(
       'antigravitySignatureCacheEnabled',
       'antigravitySignatureBypassStrict',
       'claudeCacheKeepalive',
+      'claudeCacheKeepaliveReserveQuota',
       'claudeHeaderUserAgent',
       'claudeHeaderPackageVersion',
       'claudeHeaderRuntimeVersion',
@@ -1459,6 +1460,9 @@ function parseVisualValuesFromYaml(yamlContent: string): VisualConfigValues {
     ),
 
     claudeCacheKeepalive: Boolean(v8OauthProvidersClaude?.['cache-keepalive']),
+    claudeCacheKeepaliveReserveQuota: Boolean(
+      v8OauthProvidersClaude?.['cache-keepalive-reserve-quota']
+    ),
     claudeHeaderUserAgent:
       typeof claudeHeaderDefaults?.['user-agent'] === 'string'
         ? claudeHeaderDefaults['user-agent']
@@ -1840,6 +1844,17 @@ export function useVisualConfig() {
             doc,
             ['oauth', 'providers', 'claude', 'cache-keepalive'],
             values.claudeCacheKeepalive
+          );
+        }
+
+        if (dirtyFields.has('claudeCacheKeepaliveReserveQuota')) {
+          ensureMapInDoc(doc, ['oauth']);
+          ensureMapInDoc(doc, ['oauth', 'providers']);
+          ensureMapInDoc(doc, ['oauth', 'providers', 'claude']);
+          setBooleanInDoc(
+            doc,
+            ['oauth', 'providers', 'claude', 'cache-keepalive-reserve-quota'],
+            values.claudeCacheKeepaliveReserveQuota
           );
         }
 

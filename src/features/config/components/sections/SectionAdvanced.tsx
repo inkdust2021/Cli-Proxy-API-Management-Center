@@ -65,6 +65,21 @@ export function SectionAdvanced({ values, disabled, animateIn, onChange }: Confi
               onChange={(claudeCacheKeepalive) => onChange({ claudeCacheKeepalive })}
             />
           </FieldAnchor>
+          <FieldAnchor fieldId="claudeCacheKeepaliveReserveQuota">
+            <ToggleRow
+              title={t(
+                'config_management.visual.sections.advanced.claude_cache_keepalive_reserve_quota'
+              )}
+              description={t(
+                'config_management.visual.sections.advanced.claude_cache_keepalive_reserve_quota_desc'
+              )}
+              checked={values.claudeCacheKeepaliveReserveQuota}
+              disabled={disabled}
+              onChange={(claudeCacheKeepaliveReserveQuota) =>
+                onChange({ claudeCacheKeepaliveReserveQuota })
+              }
+            />
+          </FieldAnchor>
           <Link to="/logs?tab=keepalive">{t('logs.keepalive.view_logs')}</Link>
         </FieldGroup>
 

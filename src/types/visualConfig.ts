@@ -130,6 +130,7 @@ export type VisualConfigValues = {
   antigravitySignatureCacheEnabled: boolean;
   antigravitySignatureBypassStrict: boolean;
   claudeCacheKeepalive: boolean;
+  claudeCacheKeepaliveReserveQuota: boolean;
   claudeHeaderUserAgent: string;
   claudeHeaderPackageVersion: string;
   claudeHeaderRuntimeVersion: string;
@@ -197,6 +198,7 @@ export const DEFAULT_VISUAL_VALUES: VisualConfigValues = {
   antigravitySignatureCacheEnabled: true,
   antigravitySignatureBypassStrict: false,
   claudeCacheKeepalive: false,
+  claudeCacheKeepaliveReserveQuota: false,
   claudeHeaderUserAgent: '',
   claudeHeaderPackageVersion: '',
   claudeHeaderRuntimeVersion: '',

@@ -366,6 +366,14 @@ export const CONFIG_FIELD_SEARCH_INDEX: ConfigFieldSearchEntry[] = [
     yamlKeys: ['oauth', 'providers', 'claude', 'cache-keepalive'],
     keywords: ['claude', 'prompt cache', 'keepalive', '缓存', '保活'],
   },
+  {
+    fieldId: 'claudeCacheKeepaliveReserveQuota',
+    sectionId: 'advanced',
+    labelKey: L('sections.advanced.claude_cache_keepalive_reserve_quota'),
+    hintKey: L('sections.advanced.claude_cache_keepalive_reserve_quota_desc'),
+    yamlKeys: ['oauth', 'providers', 'claude', 'cache-keepalive-reserve-quota'],
+    keywords: ['claude', 'keepalive', 'quota', '1%', '保活', '预留', '额度'],
+  },
   // Claude header defaults — qualifierKey disambiguates the shared "User-Agent" label.
   {
     fieldId: 'claudeHeaderUserAgent',
